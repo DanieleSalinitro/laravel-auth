@@ -1,30 +1,35 @@
 @extends('layouts.admin')
+@section('title', 'Create Project')
+
 
 @section('content')
 <section>
     <h1>Crea nuovo progetto</h1>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('admin.projects.store') }}" method="POST">
+    <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="form-group">
-            <label for="title">Titolo</label>
-            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
+        <div class="mb-3">
+            <label for="title" class="form-label">Titolo</label>
+            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
+                   value="{{ old('title') }}" minlength="3" maxlength="200" required>
+            @error('title')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            <div id="titleHelp" class="form-text text-white">Inserire un minimo di 3 caratteri e un massimo di 200</div>
         </div>
-        <div class="form-group">
-            <label for="content">Contenuto</label>
-            <textarea name="content" id="content" class="form-control" required>{{ old('content') }}</textarea>
+        <div class="mb-3">
+            <label for="content" class="form-label">Contenuto</label>
+            <textarea class="form-control @error('content') is-invalid @enderror" id="content" name="content" required>
+                {{ old('content') }}
+            </textarea>
+            @error('content')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
-        <button type="submit" class="btn btn-primary">Salva</button>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-danger">Crea</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+        </div>
     </form>
 </section>
 @endsection

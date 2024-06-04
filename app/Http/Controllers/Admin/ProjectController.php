@@ -6,6 +6,9 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
+
 
 
 class ProjectController extends Controller
@@ -33,20 +36,13 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        $request -> validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'slug' => 'required|unique:projects,slug',
-        ]);
-        $form_data = $request->all();
+        $form_data = $request->validated();
         $form_data['slug'] = Project::generateSlug($form_data['title']);
-        Project::create($form_data);
-        
-        return redirect()->route('admin.projects.index')->with('message', 'New project created successfully');
+        $newProject = Project::create($form_data);        
+        return redirect()->route('admin.projects.index')->with('message', 'Nuovo progetto creato correttamente');
     }
-
     /**
      * Display the specified resource.
      */
@@ -68,27 +64,24 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-        ]);
-        $project->update($request->all());
-
-        return redirect()->route('admin.projects.index')->with('message', 'Project updated successfully');
+        $form_data = $request->all();
+        if ($project->title !== $form_data['title']) {
+            $form_data['slug'] = Project::generateSlug($form_data['title']);
+        }
+        $project->update($form_data);
+        return redirect()->route('admin.projects.index')->with('message', 'Progetto aggiornato correttamente');
 
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Project $project)
     {
-        //
-        if ($project->image) {
-            Storage::delete($project->image);
-        }
         $project->delete();
         return redirect()->route('admin.projects.index')->with('message', $project->title . ' è stato eliminato');
     }

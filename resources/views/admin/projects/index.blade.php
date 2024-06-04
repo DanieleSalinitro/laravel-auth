@@ -13,7 +13,7 @@
             <tr>
               <th scope="col">Id</th>
               <th scope="col">Titolo</th>
-              <th scope="col">Slug</th>
+              <th scope="col">Contenuto</th>
               <th scope="col">Creato il</th>
               <th scope="col">Aggiornato il</th>
               <th scope="col">Azioni</th>
