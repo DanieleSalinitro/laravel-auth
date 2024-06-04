@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProjectController extends Controller
 {
@@ -13,7 +15,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects=Project::all();
+        
+        $projects = Project::paginate(3);
+        //dd($posts);
         return view('admin.projects.index', compact('projects'));
     }
 
@@ -23,6 +27,8 @@ class ProjectController extends Controller
     public function create()
     {
         //
+        return view('admin.projects.create');
+
     }
 
     /**
@@ -39,6 +45,8 @@ class ProjectController extends Controller
     public function show(project $project)
     {
         //
+        return view('admin.projects.show', compact('project'));
+
     }
 
     /**
@@ -47,6 +55,8 @@ class ProjectController extends Controller
     public function edit(project $project)
     {
         //
+        return view('admin.projects.edit', compact('project'));
+
     }
 
     /**
@@ -63,5 +73,10 @@ class ProjectController extends Controller
     public function destroy(project $project)
     {
         //
+        if ($project->image) {
+            Storage::delete($project->image);
+        }
+        $project->delete();
+        return redirect()->route('admin.projects.index')->with('message', $project->title . ' è stato eliminato');
     }
 }
