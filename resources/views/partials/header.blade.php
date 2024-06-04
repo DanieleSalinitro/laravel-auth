@@ -11,7 +11,6 @@
             class="nav-link me-3 me-lg-0"
             href="#">
             <i class="fas fa-bell"></i>
-            <span class="badge rounded-pill badge-notification bg-danger">1</span>
           </a>
 
         </li>

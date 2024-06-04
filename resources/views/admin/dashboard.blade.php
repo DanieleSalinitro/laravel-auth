@@ -23,4 +23,7 @@
         </div>
     </div>
 </div>
+<div class="text-center p-4">
+    <a href="{{route('admin.projects.index')}}" class="btn btn-success">Vai ai tuoi progetti</a>
+</div>
 @endsection

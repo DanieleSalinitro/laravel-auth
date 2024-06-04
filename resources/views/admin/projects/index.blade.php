@@ -1,25 +1,22 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('title', 'Projects')
 
 @section('content')
 <section>
-    @if(session()->has('message'))
-    <div class="alert alert-success">{{session()->get('message')}}</div>
-    @endif
     <div class="d-flex justify-content-between align-items-center py-4">
-        <h1>Projects</h1>
-        <a href="{{route('admin.projects.create')}}" class="btn btn-danger">Create new project</a>
+        <h1>Progetti</h1>
+        <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">Aggiungi nuovo progetto</a>
     </div>
 
     <table class="table table-striped">
         <thead>
             <tr>
               <th scope="col">Id</th>
-              <th scope="col">Title</th>
+              <th scope="col">Titolo</th>
               <th scope="col">Slug</th>
-              <th scope="col">Created At</th>
-              <th scope="col">Update At</th>
-              <th scope="col">Action</th>
+              <th scope="col">Creato il</th>
+              <th scope="col">Aggiornato il</th>
+              <th scope="col">Azioni</th>
             </tr>
           </thead>
           <tbody>
@@ -31,26 +28,18 @@
                 <td>{{$project->created_at}}</td>
                 <td>{{$project->updated_at}}</td>
                 <td>
-                    <a href="{{route('admin.projects.show', $project->slug)}}" title="Show" class="text-black px-2"><i class="fa-solid fa-eye"></i></a>
-                    <a href="{{route('admin.projects.edit', $project->slug)}}" title="Edit" class="text-black px-2"><i class="fa-solid fa-pen"></i></a>
-                    <form action="{{route('admin.projects.destroy', $project->slug)}}" method="POST" class="d-inline-block">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="delete-button border-0 bg-transparent"  data-item-title="{{ $project->title }}" data-item-id = "{{ $project->id }}">
-                        <i class="fa-solid fa-trash"></i>
-                      </button>
-
+                    <a href="{{ route('admin.projects.edit', $project->slug) }}" class="btn btn-warning">Modifica</a>
+                    <form action="{{ route('admin.projects.destroy', $project->slug) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Elimina</button>
                     </form>
-
-
                 </td>
-              </tr>
+            </tr>
             @endforeach
 
 
           </tbody>
       </table>
 </section>
-{{ $project->links('vendor.pagination.bootstrap-5') }}
-@include('partials.modal-delete')
 @endsection

@@ -16,8 +16,7 @@ class ProjectController extends Controller
     public function index()
     {
         
-        $projects = Project::paginate(3);
-        //dd($posts);
+        $projects = Project::all();
         return view('admin.projects.index', compact('projects'));
     }
 
@@ -36,17 +35,24 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request -> validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+            'slug' => 'required|unique:projects,slug',
+        ]);
+        $form_data = $request->all();
+        $form_data['slug'] = Project::generateSlug($form_data['title']);
+        Project::create($form_data);
+        
+        return redirect()->route('admin.projects.index')->with('message', 'New project created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(project $project)
+    public function show(Project $project)
     {
-        //
         return view('admin.projects.show', compact('project'));
-
     }
 
     /**
@@ -62,15 +68,22 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, project $project)
+    public function update(Request $request, Project $project)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+        ]);
+        $project->update($request->all());
+
+        return redirect()->route('admin.projects.index')->with('message', 'Project updated successfully');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(project $project)
+    public function destroy(Project $project)
     {
         //
         if ($project->image) {

@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 @section('content')
     <section class="container">
-        <h1>Section title</h1>
-        <p>section content</p>
+        <h1>Home</h1>
+        <p>Benvenuti nel Portfolio di Daniele</p>
     </section>
 @endsection
